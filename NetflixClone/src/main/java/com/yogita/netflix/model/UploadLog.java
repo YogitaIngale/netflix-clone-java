@@ -28,7 +28,7 @@ public class UploadLog {
         this.uploadDate = LocalDateTime.now();
     }
 
-    // getters & setters
+    
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
