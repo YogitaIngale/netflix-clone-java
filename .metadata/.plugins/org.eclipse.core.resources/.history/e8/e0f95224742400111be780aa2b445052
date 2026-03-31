@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Home</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="nav">
+<div class="logo">NETFLIX</div>
+<div class="menu">
+<a href="#">Home</a>
+<a href="#">TV Shows</a>
+<a href="#">Movies</a>
+<a href="#">My List</a>
+</div>
+</div>
+
+<div class="banner">
+<div class="content">
+<h1>Unlimited movies shows and more</h1>
+<p>Watch anywhere Cancel anytime</p>
+<button>Play</button>
+</div>
+</div>
+
+<div class="section">
+<h2>Trending</h2>
+<div class="row">
+<img src="/Images/StrangerthingsPoster.jpg"
+data-title="Stranger Things"
+data-desc="A group of kids uncover supernatural mysteries in their town."
+data-trailer="https://www.youtube.com/embed/b9EkMc79ZSU?si=3EdTwr609aTICgCL">
+
+<img src="/Images/MyName.jpg"
+data-title="My Name"
+data-desc="A woman joins a crime gang to avenge her father."
+data-trailer="https://www.youtube.com/embed/MaJ7ZT70ve4?si=x64J8xE1JSGtVDWN">
+
+<img src="/Images/AllofUsAreDead.jpg"
+data-title="All Of Us Are Dead"
+data-desc="Students struggle to survive a zombie outbreak."
+data-trailer="https://www.youtube.com/embed/IN5TD4VRcSM?si=P62Pg655VFkU_YhE">
+
+<img src="/Images/SquadGame.jpg"
+data-title="Squid Game"
+data-desc="Contestants risk their lives in deadly survival games."
+data-trailer="https://www.youtube.com/embed/oqxAJKy0ii4?si=gudzwNWr3lLXHqGv">
+
+<img src="/Images/Damsel.jpg"
+data-title="Damsel"
+data-desc="A young woman agrees to marry a handsome prince -- only to discover it was all a trap. She is thrown into a cave with a fire-breathing dragon and must rely solely on her wits and will to survive."
+data-trailer="https://www.youtube.com/embed/iM150ZWovZM?si=9scM0Ri3j48qq4tu">
+
+<img src="/Images/Megan.jpg"
+data-title="M3GAN"
+data-desc="An AI doll turns dangerously protective."
+data-trailer="https://www.youtube.com/embed/BRb4U99OU80">
+</div>
+</div>
+
+<div class="section">
+<h2>Popular</h2>
+<div class="row">
+<img src="/Images/StrangerthingsPoster.jpg"
+data-title="Stranger Things"
+data-desc="A group of kids uncover supernatural mysteries in their town."
+data-trailer="https://www.youtube.com/embed/b9EkMc79ZSU?si=3EdTwr609aTICgCL">
+
+<img src="/Images/MyName.jpg"
+data-title="My Name"
+data-desc="A woman joins a crime gang to avenge her father."
+data-trailer="https://www.youtube.com/embed/MaJ7ZT70ve4?si=x64J8xE1JSGtVDWN">
+
+<img src="/Images/AllofUsAreDead.jpg"
+data-title="All Of Us Are Dead"
+data-desc="Students struggle to survive a zombie outbreak."
+data-trailer="https://www.youtube.com/embed/IN5TD4VRcSM?si=P62Pg655VFkU_YhE">
+
+<img src="/Images/SquadGame.jpg"
+data-title="Squid Game"
+data-desc="Contestants risk their lives in deadly survival games."
+data-trailer="https://www.youtube.com/embed/oqxAJKy0ii4?si=gudzwNWr3lLXHqGv">
+
+<img src="/Images/Damsel.jpg"
+data-title="Damsel"
+data-desc="A young woman agrees to marry a handsome prince -- only to discover it was all a trap. She is thrown into a cave with a fire-breathing dragon and must rely solely on her wits and will to survive."
+data-trailer="https://www.youtube.com/embed/iM150ZWovZM?si=9scM0Ri3j48qq4tu">
+
+<img src="/Images/Megan.jpg"
+data-title="M3GAN"
+data-desc="An AI doll turns dangerously protective."
+data-trailer="https://www.youtube.com/embed/BRb4U99OU80">
+</div>
+</div>
+<div class="footer">
+<div class="f1">
+<p>Questions Call 107 546 5498</p>
+</div>
+
+<div class="f2">
+<div>
+<a href="#">FAQ</a>
+<a href="#">Investor Relations</a>
+<a href="#">Privacy</a>
+<a href="#">Speed Test</a>
+</div>
+
+<div>
+<a href="#">Help Centre</a>
+<a href="#">Jobs</a>
+<a href="#">Cookie Preferences</a>
+<a href="#">Legal Notices</a>
+</div>
+
+<div>
+<a href="#">Account</a>
+<a href="#">Ways to Watch</a>
+<a href="#">Corporate Information</a>
+<a href="#">Only on Netflix</a>
+</div>
+
+<div>
+<a href="#">Media Centre</a>
+<a href="#">Terms of Use</a>
+<a href="#">Contact Us</a>
+</div>
+</div>
+
+<div class="f3">
+<p>Netflix India</p>
+</div>
+</div>
+<div id="movieModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img id="modalImg" src="" alt="Movie Poster">
+    <h2 id="modalTitle">Movie Title</h2>
+    <p id="modalDesc">Movie Description goes here...</p>
+    <button id="playBtn">Play</button>
+  </div>
+</div>
+
+
+ <script src="/js/home.js"></script>
+</body>
+</html>

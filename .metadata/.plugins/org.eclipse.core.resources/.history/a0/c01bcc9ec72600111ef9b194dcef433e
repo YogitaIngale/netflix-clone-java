@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { font-family: Arial; margin: 0; background: #111; color: white; }
+        .container { padding: 20px; max-width: 1000px; margin: auto; }
+        h1 { color: #e50914; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border-bottom: 1px solid #333; text-align: left; }
+        th { background: #222; }
+        input, select { padding: 8px; margin: 5px 0; width: 100%; }
+        button { padding: 10px 15px; background: #e50914; border: none; color: white; cursor: pointer; }
+        button:hover { background: #f40612; }
+        .form-box { background: #222; padding: 20px; margin-bottom: 30px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Admin Dashboard</h1>
+
+    <div class="form-box">
+        <h2>Add New Movie</h2>
+        <form action="/admin/add" method="post">
+            <input type="text" name="title" placeholder="Title" required>
+            <input type="text" name="description" placeholder="Description" required>
+            <input type="text" name="poster" placeholder="Poster URL" required>
+            <input type="text" name="trailer" placeholder="Trailer URL" required>
+            <input type="text" name="iframeLink" placeholder="Iframe Video URL">
+            <select name="category" required>
+                <option value="">Select Category</option>
+                <option value="TRENDING">Trending</option>
+                <option value="POPULAR">Popular</option>
+            </select>
+            <select name="isPremium">
+                <option value="false">Free</option>
+                <option value="true">Premium</option>
+            </select>
+            <button type="submit">Add Movie</button>
+        </form>
+    </div>
+
+    <h2>All Movies</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Premium</th>
+            <th>Actions</th>
+        </tr>
+        <!-- Thymeleaf loop to display movies -->
+        <tr th:each="movie : ${movies}">
+            <td th:text="${movie.id}"></td>
+            <td th:text="${movie.title}"></td>
+            <td th:text="${movie.category}"></td>
+            <td th:text="${movie.isPremium}"></td>
+            <td>
+                <a th:href="@{/admin/delete/{id}(id=${movie.id})}">
+                    <button>Delete</button>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

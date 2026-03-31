@@ -1,0 +1,51 @@
+package com.yogita.netflix.model;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="users")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @Column(unique = true)
+    private String email;
+
+    private String password;
+
+    private boolean premium;
+    
+    public String getPlan() {
+		return plan;
+	}
+	public void setPlan(String plan) {
+		this.plan = plan;
+	}
+	public int getMonths() {
+		return months;
+	}
+	public void setMonths(int months) {
+		this.months = months;
+	}
+	private String plan;
+    private int months;
+
+    public Long getId(){ return id; }
+    public void setId(Long id){ this.id=id; }
+
+    public String getName(){ return name; }
+    public void setName(String name){ this.name=name; }
+
+    public String getEmail(){ return email; }
+    public void setEmail(String email){ this.email=email; }
+
+    public String getPassword(){ return password; }
+    public void setPassword(String password){ this.password=password; }
+
+    public boolean isPremium(){ return premium; }
+    public void setPremium(boolean premium){ this.premium=premium; }
+}

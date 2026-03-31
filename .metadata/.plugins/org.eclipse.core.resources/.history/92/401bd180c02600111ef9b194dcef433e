@@ -1,0 +1,57 @@
+package com.yogita.netflix.controller;
+
+import com.yogita.netflix.model.Movie;
+import com.yogita.netflix.model.User;
+import com.yogita.netflix.service.MovieService;
+import com.yogita.netflix.service.UploadLogService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/admin")
+public class AdminController {
+
+    @Autowired
+    private MovieService movieService;
+
+    @Autowired
+    private UploadLogService logService;
+
+    // Admin dashboard
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session, Model model) {
+        User admin = (User) session.getAttribute("user");
+        if(admin == null || !"ADMIN".equals(admin.getRole())) {
+            return "redirect:/login";
+        }
+        model.addAttribute("movies", movieService.getAllMovies());
+        return "admin";
+    }
+
+    // Add movie
+    @PostMapping("/add")
+    public String addMovie(@ModelAttribute Movie movie, HttpSession session) {
+        User admin = (User) session.getAttribute("user");
+        if(admin == null || !"ADMIN".equals(admin.getRole())) return "redirect:/login";
+
+        Movie saved = movieService.addMovie(movie);
+
+        // Log admin upload
+        logService.logUpload(admin.getId(), saved.getId());
+
+        return "redirect:/admin/dashboard";
+    }
+
+    // Delete movie
+    @GetMapping("/delete/{id}")
+    public String deleteMovie(@PathVariable Integer id, HttpSession session){
+        User admin = (User) session.getAttribute("user");
+        if(admin == null || !"ADMIN".equals(admin.getRole())) return "redirect:/login";
+
+        movieService.deleteMovie(id);
+        return "redirect:/admin/dashboard";
+    }
+}

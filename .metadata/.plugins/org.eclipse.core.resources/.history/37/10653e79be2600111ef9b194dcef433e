@@ -1,0 +1,5 @@
+package com.yogita.netflix.repository;
+
+public interface UploadLogRepository {
+
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TV Shows</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="nav">
+<div class="logo">NETFLIX</div>
+<div class="menu">
+<a href="/home">Home</a>
+<a href="/tvshows">TV Shows</a>
+<a href="/movies">Movies</a>
+<a href="/mylist">My List</a>
+</div>
+</div>
+
+<div class="section" style="margin-top:80px">
+<h2>TV Shows</h2>
+<div class="row">
+<img src="/Images/StrangerthingsPoster.jpg"
+         data-title="Stranger Things"
+         data-desc="A group of kids uncover supernatural mysteries in their town."
+         data-trailer="https://www.youtube.com/embed/b9EkMc79ZSU">
+<img src="/Images/AllofUsAreDead.jpg"
+         data-title="All Of Us Are Dead"
+         data-desc="Students struggle to survive a zombie outbreak."
+         data-trailer="https://www.youtube.com/embed/IN5TD4VRcSM">
+<img src="/Images/weakHero.jpg">
+
+</div>
+</div>
+<div id="movieModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+
+    <img id="modalImg" src="" alt="Movie Poster">
+    <h2 id="modalTitle">Movie Title</h2>
+    <p id="modalDesc">Movie Description goes here...</p>
+
+    <button id="playBtn">Play</button>
+
+    <div id="videoContainer" style="margin-top:20px; display:none;">
+      <iframe id="videoFrame" width="100%" height="400" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

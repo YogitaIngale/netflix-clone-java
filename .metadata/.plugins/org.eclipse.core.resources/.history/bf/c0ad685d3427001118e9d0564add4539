@@ -1,0 +1,97 @@
+package com.yogita.netflix.controller;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
+import com.yogita.netflix.model.Movie;
+import com.yogita.netflix.model.User;
+import com.yogita.netflix.service.MovieService;
+import com.yogita.netflix.service.UploadLogService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+@Controller
+@RequestMapping("/admin")
+public class AdminController {
+
+    @Autowired
+    private MovieService movieService;
+
+    @Autowired
+    private UploadLogService logService;
+
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session, Model model,
+                            @RequestParam(value="message", required=false) String message) {
+        User admin = (User) session.getAttribute("user");
+        if(admin == null || !"ADMIN".equals(admin.getRole())) {
+            return "redirect:/admin/login";
+        }
+
+        model.addAttribute("movies", movieService.getAllMovies());
+        if (message != null) model.addAttribute("message", message);
+        return "admin"; 
+    }
+
+    @PostMapping("/add")
+    public String addMovie(
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam("posterFile") MultipartFile posterFile,
+            @RequestParam String trailer,
+            @RequestParam String category,
+            HttpSession session) throws IOException {
+
+        User admin = (User) session.getAttribute("user");
+        if(admin == null || !"ADMIN".equals(admin.getRole())) {
+            return "redirect:/admin/login";
+        }
+
+        Movie movie = new Movie();
+        movie.setTitle(title);
+        movie.setDescription(description);
+        movie.setTrailer(trailer);
+        movie.setCategory(category);
+
+        // FIX 1: Use an Absolute Path to avoid the 'Temp' folder issue
+        if(!posterFile.isEmpty()){
+            String uploadDir = System.getProperty("user.dir") + File.separator + "uploads";
+            File uploadFolder = new File(uploadDir);
+            if(!uploadFolder.exists()) uploadFolder.mkdirs();
+
+            String filename = System.currentTimeMillis() + "_" + posterFile.getOriginalFilename();
+            
+            // FIX 2: Use java.nio.file.Files to manually copy the stream
+            Path destinationPath = Paths.get(uploadDir).resolve(filename);
+            Files.copy(posterFile.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+
+            // FIX 3: Store path starting with /uploads/ for the browser to find it
+            movie.setPoster("/uploads/" + filename); 
+        }
+
+        Movie saved = movieService.addMovie(movie);
+
+        // Ensure admin.getId() is handled correctly based on your User model (Long vs Integer)
+        logService.logUpload(admin.getId().intValue(), saved.getId());
+
+        // FIX 4: Use Redirect to refresh the page and prevent double-submissions
+        return "redirect:/admin/dashboard?message=Movie+added+successfully";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteMovie(@PathVariable Integer id, HttpSession session){
+        User admin = (User) session.getAttribute("user");
+        if(admin == null || !"ADMIN".equals(admin.getRole())) return "redirect:/admin/login";
+
+        movieService.deleteMovie(id);
+        return "redirect:/admin/dashboard?message=Movie+deleted+successfully";
+    }
+}

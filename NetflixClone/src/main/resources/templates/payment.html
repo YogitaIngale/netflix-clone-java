@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Payment</title>
+
+<style>
+body{
+background:black;
+color:white;
+text-align:center;
+margin-top:80px;
+font-family:Arial;
+}
+
+img{
+width:250px;
+margin-top:20px;
+}
+
+input,select{
+padding:10px;
+margin-top:10px;
+width:200px;
+}
+
+button{
+padding:12px 25px;
+background:red;
+border:none;
+color:white;
+cursor:pointer;
+margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Scan QR to Pay</h1>
+
+<p id="planText"></p>
+
+<img id="qr">
+
+<br>
+
+<input id="email" placeholder="Enter Email"><br>
+
+<select id="months">
+<option value="1">1 Month</option>
+<option value="3">3 Months</option>
+<option value="12">12 Months</option>
+</select>
+
+<br>
+
+<button onclick="pay()">I Paid</button>
+
+<script>
+
+let plan = localStorage.getItem("plan");
+let price = localStorage.getItem("price");
+
+document.getElementById("planText").innerText =
+"Plan: " + plan + " | ₹" + price;
+
+// dynamic QR (UPI)
+document.getElementById("qr").src =
+"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=demo@upi&pn=NetflixClone&am=" + price;
+
+function pay(){
+
+fetch("/api/premium/buy?plan=" + plan +
+"&months=" + document.getElementById("months").value +
+"&email=" + document.getElementById("email").value,
+{
+method:"POST"
+})
+.then(res=>res.text())
+.then(data=>{
+if(data==="success"){
+alert("Payment Successful & Receipt Sent");
+}else{
+alert("Login first");
+}
+});
+
+}
+
+</script>
+
+</body>
+</html>

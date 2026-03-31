@@ -1,0 +1,38 @@
+package com.yogita.netflix.controller;
+
+import com.yogita.netflix.model.Movie;
+import com.yogita.netflix.model.User;
+import com.yogita.netflix.service.MovieService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/movies")
+public class MovieController {
+
+@Autowired
+MovieService service;
+
+@PostMapping("/add")
+public Object add(@RequestBody Movie movie, HttpSession session){
+
+    User user = (User) session.getAttribute("user");
+
+    if(user == null || !user.getRole().equals("ADMIN")){
+        return "unauthorized";
+    }
+
+    return service.addMovie(movie);
+}
+
+@GetMapping("/trending")
+public Object trending(){
+    return service.trending();
+}
+
+@GetMapping("/popular")
+public Object popular(){
+    return service.popular();
+}
+}

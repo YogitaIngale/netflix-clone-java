@@ -1,0 +1,58 @@
+package com.yogita.netflix.controller;
+
+import jakarta.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class HomeController {
+
+    @GetMapping("/")
+    public String login(){
+        return "login";
+    }
+
+    @GetMapping("/home")
+    public String home(HttpSession session){
+        if(session.getAttribute("user") == null){
+            return "redirect:/login";
+        }
+        return "home";
+    }
+
+    @GetMapping("/login")
+    public String loginPage(){
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String register(){
+        return "register";
+    }
+
+    @GetMapping("/tvshows")
+    public String tv(){
+        return "tvshows";
+    }
+
+    @GetMapping("/movies")
+    public String movies(){
+        return "movies";
+    }
+
+    @GetMapping("/mylist")
+    public String list(){
+        return "mylist";
+    }
+    
+
+    @GetMapping("/premium")
+    public String premium(){
+        return "premium";
+    }
+
+    @GetMapping("/payment")
+    public String payment(){
+        return "payment";
+    }
+}

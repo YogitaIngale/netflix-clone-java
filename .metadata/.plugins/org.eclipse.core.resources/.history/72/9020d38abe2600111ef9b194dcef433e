@@ -1,0 +1,31 @@
+package com.yogita.netflix.service;
+
+import com.yogita.netflix.model.UploadLog;
+import com.yogita.netflix.repository.UploadLogRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class UploadLogService {
+
+    @Autowired
+    private UploadLogRepository uploadLogRepository;
+
+    // Log an upload
+    public UploadLog logUpload(Long adminId, Long movieId){
+        UploadLog log = new UploadLog(adminId, movieId);
+        return uploadLogRepository.save(log);
+    }
+
+    // Get all uploads by a specific admin
+    public List<UploadLog> getUploadsByAdmin(Long adminId){
+        return uploadLogRepository.findByAdminId(adminId);
+    }
+
+    // Get all uploads
+    public List<UploadLog> getAllUploads(){
+        return uploadLogRepository.findAll();
+    }
+}

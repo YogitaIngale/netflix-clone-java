@@ -1,0 +1,19 @@
+package com.yogita.netflix.service;
+
+import com.yogita.netflix.model.UploadLog;
+import com.yogita.netflix.repository.UploadLogRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UploadLogService {
+
+    @Autowired
+    private UploadLogRepository repo;
+
+    // Log a movie upload
+    public UploadLog logUpload(Integer adminId, Integer movieId) {
+        UploadLog log = new UploadLog(adminId, movieId);
+        return repo.save(log);
+    }
+}

@@ -1,0 +1,33 @@
+const loginForm = document.getElementById('loginForm');
+
+loginForm.addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const email = loginForm.email.value;
+  const password = loginForm.password.value;
+
+  fetch('/api/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type':'application/x-www-form-urlencoded'
+    },
+    body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+  })
+  .then(res => {
+    console.log("Status:", res.status);
+    return res.text();  
+  })
+  .then(data => {
+    console.log("Response:", data);
+
+    if(data === "success"){
+        window.location.replace("/home");  
+    }else{
+        alert("Invalid credentials");
+    }
+  })
+  .catch(err => {
+    console.log("Error:", err);
+    alert("Something went wrong");
+  });
+});

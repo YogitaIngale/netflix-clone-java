@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Netflix Admin Panel</h1>
+
+<h2>Add New Movie</h2>
+<form action="/admin/add" method="post">
+  <input type="text" name="title" placeholder="Title" required><br>
+  <input type="text" name="category" placeholder="Category" required><br>
+  <input type="text" name="poster" placeholder="Poster URL"><br>
+  <input type="text" name="video" placeholder="Video URL"><br>
+  <input type="text" name="trailer" placeholder="Trailer URL"><br>
+  <textarea name="description" placeholder="Description"></textarea><br>
+  <button type="submit">Add Movie</button>
+</form>
+
+<h2>All Movies</h2>
+<table border="1">
+<tr><th>Title</th><th>Category</th><th>Action</th></tr>
+<tr th:each="movie : ${movies}">
+  <td th:text="${movie.title}">Movie Title</td>
+  <td th:text="${movie.category}">Category</td>
+  <td>
+    <a th:href="@{'/admin/delete/' + ${movie.id}}">Delete</a>
+  </td>
+</tr>
+</table>
+</body>
+</html>

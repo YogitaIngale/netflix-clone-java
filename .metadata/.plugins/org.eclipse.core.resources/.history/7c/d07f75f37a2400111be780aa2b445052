@@ -1,0 +1,43 @@
+package com.yogita.netflix.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import com.yogita.netflix.model.User;
+import com.yogita.netflix.service.UserService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api")
+public class UserController {
+
+    @Autowired
+    private UserService service;
+
+    @PostMapping("/register")
+    public String register(@RequestBody User user){
+        service.register(user);
+        return "Registered";
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestParam String email,
+                                  @RequestParam String password,
+                                  HttpSession session){
+
+        User u = service.login(email, password);
+
+        if(u != null){
+            session.setAttribute("user", u);
+            return ResponseEntity.ok("success");   
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("fail"); 
+    }
+
+    @GetMapping("/check")
+    public boolean check(HttpSession session){
+        return session.getAttribute("user")!=null;
+    }
+}

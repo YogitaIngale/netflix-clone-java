@@ -1,0 +1,49 @@
+package com.yogita.netflix.service;
+
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+
+@Service
+public class EmailService {
+
+    private final JavaMailSender sender;
+
+    public EmailService(JavaMailSender sender){
+        this.sender = sender;
+    }
+
+    public void sendReceipt(String email, String username, String plan, String price){
+
+        try{
+
+            MimeMessage message = sender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setTo(email);
+            helper.setSubject("Your Subscription Receipt");
+
+            String html =
+                    "<div style='font-family:Arial;padding:20px;width:400px;border:1px solid #ddd;border-radius:10px;'>"
+                    + "<h2 style='color:green;text-align:center;'>Payment Successful</h2>"
+                    + "<hr>"
+                    + "<p><b>User:</b> " + username + "</p>"
+                    + "<p><b>Plan:</b> " + plan + "</p>"
+                    + "<p><b>Date:</b> " + LocalDate.now() + "</p>"
+                    + "<p><b>Amount:</b> ₹" + price + "</p>"
+                    + "<hr>"
+                    + "<p style='text-align:center;'>Thank you for subscribing</p>"
+                    + "</div>";
+
+            helper.setText(html, true);
+
+            sender.send(message);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+}

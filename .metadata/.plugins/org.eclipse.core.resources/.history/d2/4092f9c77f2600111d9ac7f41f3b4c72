@@ -1,0 +1,43 @@
+package com.yogita.netflix.controller;
+
+import com.yogita.netflix.model.Movie;
+import com.yogita.netflix.model.User;
+import com.yogita.netflix.service.MovieService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/admin")
+public class AdminController {
+
+    @Autowired
+    private MovieService movieService;
+
+    @GetMapping
+    public String admin(HttpSession session){
+
+        User user = (User) session.getAttribute("user");
+
+        if(user == null || !user.getRole().equals("ADMIN")){
+            return "redirect:/login.html";
+        }
+
+        return "admin";
+    }
+
+    @PostMapping("/add")
+    public String addMovie(Movie movie, HttpSession session){
+
+        User user = (User) session.getAttribute("user");
+
+        if(user == null || !user.getRole().equals("ADMIN")){
+            return "redirect:/login.html";
+        }
+
+        movieService.addMovie(movie);
+
+        return "redirect:/admin";
+    }
+}

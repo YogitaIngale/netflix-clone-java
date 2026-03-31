@@ -1,0 +1,55 @@
+package com.yogita.netflix.controller;
+
+import com.razorpay.*;
+import org.json.JSONObject;
+import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
+
+import com.yogita.netflix.model.User;
+import com.yogita.netflix.service.UserService;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/payment")
+public class PaymentController {
+
+    private final String KEY = "";
+    private final String SECRET = "";
+
+    private final UserService service;
+
+    public PaymentController(UserService service){
+        this.service = service;
+    }
+
+    @PostMapping("/create-order")
+    public String createOrder() throws Exception {
+
+        RazorpayClient client = new RazorpayClient(KEY, SECRET);
+
+        JSONObject options = new JSONObject();
+        options.put("amount", 100); 
+        options.put("currency", "INR");
+        options.put("receipt", "txn_123");
+
+        Order order = client.orders.create(options);
+
+        return order.toString();
+    }
+
+    @PostMapping("/verify")
+    public String verify(@RequestBody Map<String,String> data,
+                         HttpSession session){
+
+        User user = (User) session.getAttribute("user");
+
+        user.setPremium(true);
+        user.setPlan(data.get("plan"));
+        user.setMonths(1);
+
+        service.save(user);
+
+        return "success";
+    }
+}

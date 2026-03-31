@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Payment</title>
+
+<style>
+body{
+background:black;
+color:white;
+text-align:center;
+margin-top:100px;
+font-family:Arial;
+}
+
+img{
+width:250px;
+margin-top:20px;
+}
+
+button{
+padding:12px 25px;
+background:red;
+border:none;
+color:white;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Scan QR to Pay</h1>
+
+<p id="planText"></p>
+
+<img src="/Images/qr.png">
+
+<br><br>
+
+<select id="months">
+<option value="1">1 Month</option>
+<option value="3">3 Months</option>
+<option value="12">12 Months</option>
+</select>
+
+<br><br>
+
+<button onclick="pay()">I Paid</button>
+
+<script>
+document.getElementById("planText").innerText =
+"Plan: " + localStorage.getItem("plan");
+
+function pay(){
+
+fetch("/api/premium/buy?plan=" + 
+localStorage.getItem("plan") +
+"&months=" + document.getElementById("months").value,
+{
+method:"POST"
+})
+.then(res=>res.text())
+.then(data=>{
+if(data==="success"){
+alert("Payment Successful");
+}else{
+alert("Login first");
+}
+});
+}
+</script>
+
+</body>
+</html>

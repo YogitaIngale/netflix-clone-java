@@ -1,0 +1,34 @@
+package com.yogita.netflix.controller;
+
+import com.yogita.netflix.model.User;
+import com.yogita.netflix.service.UserService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+@RestController
+@RequestMapping("/admin/api")
+public class AdminLoginController {
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String,String> body, HttpSession session){
+        String email = body.get("email");
+        String password = body.get("password");
+
+        User admin = userService.login(email, password);
+
+        if(admin != null && "ADMIN".equalsIgnoreCase(admin.getRole())){
+            session.setAttribute("user", admin);
+            return ResponseEntity.ok(admin);
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid admin credentials");
+    }
+
+}

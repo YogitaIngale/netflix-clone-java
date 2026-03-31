@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Payment</title>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<style>
+body{
+background:black;
+color:white;
+text-align:center;
+margin-top:100px;
+font-family:Arial;
+}
+
+button{
+padding:12px 25px;
+background:red;
+border:none;
+color:white;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Payment</h1>
+
+<p id="planText"></p>
+
+<select id="months">
+<option value="1">1 Month</option>
+<option value="3">3 Months</option>
+<option value="12">12 Months</option>
+</select>
+
+<br><br>
+
+<button onclick="pay()">Pay ₹1</button>
+
+<script src="/js/payment.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+package com.yogita.netflix.controller;
+
+import com.yogita.netflix.model.User;
+import com.yogita.netflix.service.EmailService;
+import com.yogita.netflix.service.UserService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/premium")
+public class PremiumController {
+
+    private final UserService service;
+    private final EmailService emailService;
+
+    public PremiumController(UserService service, EmailService emailService){
+        this.service = service;
+        this.emailService = emailService;
+    }
+
+    @PostMapping("/buy")
+    public String buy(@RequestParam String plan,
+                      @RequestParam int months,
+                      @RequestParam String email,
+                      HttpSession session){
+
+        User user = (User) session.getAttribute("user");
+
+        if(user == null){
+            return "login";
+        }
+
+        user.setPremium(true);
+        user.setPlan(plan);
+        user.setMonths(months);
+
+        service.save(user);
+
+        emailService.sendReceipt(email, user.getName(), plan);
+
+        return "success";
+    }
+}

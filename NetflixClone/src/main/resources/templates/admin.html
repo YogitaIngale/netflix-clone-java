@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { font-family: Arial; margin: 0; background: #111; color: white; }
+        .container { padding: 20px; max-width: 1000px; margin: auto; }
+        h1 { color: #e50914; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border-bottom: 1px solid #333; text-align: left; }
+        th { background: #222; }
+        input, select { padding: 8px; margin: 5px 0; width: 100%; }
+        button { padding: 10px 15px; background: #e50914; border: none; color: white; cursor: pointer; }
+        button:hover { background: #f40612; }
+        .form-box { background: #222; padding: 20px; margin-bottom: 30px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Admin Dashboard</h1>
+
+    <div class="form-box">
+        <h2>Add New Movie</h2>
+        <form action="/admin/add" method="post" enctype="multipart/form-data">
+    <input type="text" name="title" placeholder="Title" required>
+    <textarea name="description" placeholder="Description"></textarea>
+    <input type="file" name="posterFile" required> <!-- new file input -->
+    <input type="text" name="trailer" placeholder="Trailer URL">
+    <select name="category">
+        <option value="TRENDING">TRENDING</option>
+        <option value="POPULAR">POPULAR</option>
+    </select>
+    <button type="submit">Add Movie</button>
+</form>
+<div th:if="${message}" style="color:lime; margin-top:10px;">
+    <p th:text="${message}"></p>
+</div>
+    </div>
+
+   <!--  <h2>All Movies</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Premium</th>
+            <th>Actions</th>
+        </tr>
+        
+        <tr th:each="movie : ${movies}">
+            <td th:text="${movie.id}"></td>
+            <td th:text="${movie.title}"></td>
+            <td th:text="${movie.category}"></td>
+            <td th:text="${movie.isPremium}"></td>
+            <td>
+                <a th:href="@{/admin/delete/{id}(id=${movie.id})}">
+                    <button>Delete</button>
+                </a>
+            </td>
+        </tr>
+    </table> -->
+</div>
+<script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        // 1. Prevent the default "Whitelabel" redirect
+        e.preventDefault(); 
+        
+        let formData = new FormData(this);
+        let submitBtn = this.querySelector('button');
+        submitBtn.innerText = "Uploading...";
+        submitBtn.disabled = true;
+
+        // 2. Send data in the background
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+               
+                alert("Success: Movie has been added to the database!");
+                
+                window.location.href = "/admin/dashboard?message=Movie+Added";
+            } else {
+                alert("Faild: Movie has Not been added to the database!");
+                submitBtn.innerText = "Add Movie";
+                submitBtn.disabled = false;
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Network Error: Could not connect to server.");
+            submitBtn.disabled = false;
+        });
+    });
+</script>
+</body>
+</html>

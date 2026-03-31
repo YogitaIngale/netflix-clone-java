@@ -1,0 +1,82 @@
+package com.yogita.netflix.controller;
+
+import java.io.File;
+import java.io.IOException;
+import com.yogita.netflix.model.Movie;
+import com.yogita.netflix.model.User;
+import com.yogita.netflix.service.MovieService;
+import com.yogita.netflix.service.UploadLogService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/admin")
+public class AdminController {
+
+    @Autowired
+    private MovieService movieService;
+
+    @Autowired
+    private UploadLogService logService;
+
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session, Model model) {
+        User admin = (User) session.getAttribute("user");
+        if(admin == null || !"ADMIN".equals(admin.getRole())) {
+            return "redirect:/admin/login"; // redirect to admin login
+        }
+        model.addAttribute("movies", movieService.getAllMovies());
+        return "admin"; // Thymeleaf template
+    }
+
+    
+    @PostMapping("/add")
+    public String addMovie(
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam("posterFile") MultipartFile posterFile,
+            @RequestParam String trailer,
+            @RequestParam String category,
+            HttpSession session) throws IOException {
+
+        User admin = (User) session.getAttribute("user");
+        if(admin == null || !"ADMIN".equals(admin.getRole())) return "redirect:/login";
+
+        Movie movie = new Movie();
+        movie.setTitle(title);
+        movie.setDescription(description);
+        movie.setTrailer(trailer);
+        movie.setCategory(category);
+
+        // Save poster to server
+        if(!posterFile.isEmpty()){
+            String uploadDir = "uploads/"; // folder inside your project or absolute path
+            File uploadFolder = new File(uploadDir);
+            if(!uploadFolder.exists()) uploadFolder.mkdirs();
+
+            String filename = System.currentTimeMillis() + "_" + posterFile.getOriginalFilename();
+            File file = new File(uploadDir + filename);
+            posterFile.transferTo(file);
+
+            movie.setPoster("/" + uploadDir + filename); // save relative path for HTML
+        }
+
+        Movie saved = movieService.addMovie(movie);
+
+        logService.logUpload(admin.getId().intValue(), saved.getId());
+
+        return "redirect:/admin/dashboard";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteMovie(@PathVariable Integer id, HttpSession session){
+        User admin = (User) session.getAttribute("user");
+        if(admin == null || !"ADMIN".equals(admin.getRole())) return "redirect:/login";
+
+        movieService.deleteMovie(id);
+        return "redirect:/admin/dashboard";
+    }
+}
